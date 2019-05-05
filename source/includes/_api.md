@@ -80,7 +80,6 @@ Make sure to test your bot to ensure it can handle all of the capabilities you l
   "roles": ["percival", "morgana"],
   "ladyOfTheLake": false,
   "teamLeader": 2,
-  "name": "DeepRole#23432",
   "players": [
     "ExamplePlayer1",
     "CoolPlayer",
@@ -88,7 +87,13 @@ Make sure to test your bot to ensure it can handle all of the capabilities you l
     "DeepRole#23432",
     "CoolPerson",
     "Detry322"
-  ]
+  ],
+  "name": "DeepRole#23432",
+  "role": "merlin",
+  "see": {
+    "spies": ["CoolPlayer", "CoolPerson"],
+    "merlins": []
+  }
 }
 
 // This indicates ProAvalon wishes to start a game session:
@@ -98,6 +103,7 @@ Make sure to test your bot to ensure it can handle all of the capabilities you l
 //    - Where the team leader (first proposer of the game) is player 2.
 //    - Where your bot's username is DeepRole#23432.
 //    - Where the players above are playing.
+//    - Where you are merlin and you perceive "CoolPlayer" and "CoolPerson" to be evil.
 ```
 
 > Your API should return a response like this:
@@ -123,9 +129,18 @@ Parameter | Type | Description
 `numPlayers` | Integer | The number of players in this game
 `roles` | Array of string | The list of special roles in use during this game. See "Get Bot Information" endpoint for valid values.
 `ladyOfTheLake` | Boolean | If set to true, the Lady of the Lake is in play during this game session.
-`teamLeader` | Integer | The (0 indexed? 1 indexed?) index of the first player to propose during this game.
-`name` | String | The name of your bot during this game.
+`teamLeader` | Integer | The (0-indexed) index of the first player to propose during this game.
 `players` | Array of string | The list of players participating in this game, ordered by seat number.
+`name` | String | The name of your bot during this game.
+`role` | String | The role of your bot in the game. This also determines your alliance. One of: `servant`, `merlin`, `percival`, `minion`, `assassin`, `mordred`, `morgana`, `oberon`
+`see` | Object | Your perspective about other players.
+
+### `see` Object Schema
+
+Parameter | Type | Description
+--------- | ------- | -----------
+`spies` | Array of string | The list of players you perceive to be spies.
+`merlins` | Array of string | The list of players you perceive to be merlin.
 
 ### Response Object Schema
 
@@ -147,7 +162,7 @@ Code | Meaning
 
 ```json-doc
 {
-  "sessionID": "be565d891243703c22e1", // The session ID from create session endpoint,
+  "sessionID": "be565d891243703c22e1", // The session ID from create session endpoint
   "gameInfo": {} // The large game info object - TODO: Add an example object
 }
 ```
@@ -156,27 +171,48 @@ Code | Meaning
 
 ```json-doc
 {
-  // TODO: Fill this in with desired response
+  "buttonPressed": "yes",
+  "selectedPlayers": [
+    "ProNub",
+    "Detry322"
+  ]
 }
+
+// This proposes a team with players "ProNub" and "Detry322"
 ```
 > During voting phases, your bot should return a response like this:
 
 ```json-doc
 {
-  // TODO: Fill this in with desired response
+  "buttonPressed": "yes", // or "no"
 }
+
+// This approves the proposed mission.
 ```
-> During merlin selection phases, your bot should return a response like this:
+> During mission phases, your bot should return a response like this:
 
 ```json-doc
 {
-  // TODO: Fill this in with desired response
+  "buttonPressed": "yes", // or "no"
 }
+
+// This succeeds the mission.
+```
+> During merlin selection phase, your bot should return a response like this:
+
+```json-doc
+{
+  "buttonPressed": "yes",
+  "selectedPlayers": [
+    "Detry322"
+  ]
+}
+
+// This selects Detry322 as the merlin.
 ```
 
 
-
-This endpoint is called every time your bot needs to make an action.
+Using this endpoint, you return you bot's action to ProAvalon. This endpoint is called every time your bot needs to make an action.
 
 ### HTTP Request
 
@@ -191,13 +227,56 @@ Parameter | Type | Description
 
 ### Response Object Schema
 
-TODO.
+Parameter | Type | Description
+--------- | ------- | -----------
+`buttonPressed` | `"yes"` or `"no"` | Specifies the button your bot will press. During different game phases, this will mean different things.
+`selectedPlayers` | Array of string | If the current game phase requires your bot to select players, this specifies the players to be selected.
 
 ### HTTP Response Codes
 
 Code | Meaning
 ------------------ | -------
 `200 OK` | Your API successfully returned a move.
-`400 Bad Request` | Your API was unable to parse the payload from ProAvalon.
+`401 Unauthorized` | Your API was provided an incorrect `Authorization` header.
+`404 Not Found` | Your API could not find a session with the given session ID.
+
+
+## End a game session
+
+> ProAvalon will send a payload like this:
+
+```json-doc
+{
+  "sessionID": "be565d891243703c22e1", // The session ID from create session endpoint
+  "reason": "complete",
+  "gameInfo": {} // The final Game Info object for this game.
+}
+```
+
+> There is no need for your API to return a response other than 200 OK
+
+This endpoint is used to help clean up the information used during play. It is called whenever a game is finished.
+
+### HTTP Request
+
+`POST /v0/session/delete`
+
+### Request Object Schema
+
+Parameter | Type | Description
+--------- | ------- | -----------
+`sessionID` | String | The session ID describing the game being played.
+`reason` | `"complete"` or `"error"` | The reason this game was ended.
+`gameInfo` | GameInfo | A large object describing the full state of the game.
+
+### Response Object Schema
+
+No response object is necessary.
+
+### HTTP Response Codes
+
+Code | Meaning
+------------------ | -------
+`200 OK` | Your API successfully cleaned up the data.
 `401 Unauthorized` | Your API was provided an incorrect `Authorization` header.
 `404 Not Found` | Your API could not find a session with the given session ID.
