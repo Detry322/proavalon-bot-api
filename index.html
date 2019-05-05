@@ -246,6 +246,9 @@
                   <li>
                     <a href="#get-bot-action" class="toc-h2 toc-link" data-title="Get bot action">Get bot action</a>
                   </li>
+                  <li>
+                    <a href="#end-a-game-session" class="toc-h2 toc-link" data-title="End a game session">End a game session</a>
+                  </li>
               </ul>
           </li>
       </ul>
@@ -420,7 +423,6 @@ Make sure to test your bot to ensure it can handle all of the capabilities you l
   </span><span class="s2">"roles"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"percival"</span><span class="p">,</span><span class="w"> </span><span class="s2">"morgana"</span><span class="p">],</span><span class="w">
   </span><span class="s2">"ladyOfTheLake"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
   </span><span class="s2">"teamLeader"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"DeepRole#23432"</span><span class="p">,</span><span class="w">
   </span><span class="s2">"players"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
     </span><span class="s2">"ExamplePlayer1"</span><span class="p">,</span><span class="w">
     </span><span class="s2">"CoolPlayer"</span><span class="p">,</span><span class="w">
@@ -428,7 +430,13 @@ Make sure to test your bot to ensure it can handle all of the capabilities you l
     </span><span class="s2">"DeepRole#23432"</span><span class="p">,</span><span class="w">
     </span><span class="s2">"CoolPerson"</span><span class="p">,</span><span class="w">
     </span><span class="s2">"Detry322"</span><span class="w">
-  </span><span class="p">]</span><span class="w">
+  </span><span class="p">],</span><span class="w">
+  </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"DeepRole#23432"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"role"</span><span class="p">:</span><span class="w"> </span><span class="s2">"merlin"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"see"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"spies"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"CoolPlayer"</span><span class="p">,</span><span class="w"> </span><span class="s2">"CoolPerson"</span><span class="p">],</span><span class="w">
+    </span><span class="s2">"merlins"</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span><span class="w">
+  </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 
 </span><span class="c1">// This indicates ProAvalon wishes to start a game session:</span><span class="w">
@@ -438,6 +446,7 @@ Make sure to test your bot to ensure it can handle all of the capabilities you l
 </span><span class="c1">//    - Where the team leader (first proposer of the game) is player 2.</span><span class="w">
 </span><span class="c1">//    - Where your bot's username is DeepRole#23432.</span><span class="w">
 </span><span class="c1">//    - Where the players above are playing.</span><span class="w">
+</span><span class="c1">//    - Where you are merlin and you perceive "CoolPlayer" and "CoolPerson" to be evil.</span><span class="w">
 </span></code></pre>
 <blockquote>
 <p>Your API should return a response like this:</p>
@@ -477,7 +486,12 @@ Make sure to test your bot to ensure it can handle all of the capabilities you l
 <tr>
 <td><code>teamLeader</code></td>
 <td>Integer</td>
-<td>The (0 indexed? 1 indexed?) index of the first player to propose during this game.</td>
+<td>The (0-indexed) index of the first player to propose during this game.</td>
+</tr>
+<tr>
+<td><code>players</code></td>
+<td>Array of string</td>
+<td>The list of players participating in this game, ordered by seat number.</td>
 </tr>
 <tr>
 <td><code>name</code></td>
@@ -485,9 +499,33 @@ Make sure to test your bot to ensure it can handle all of the capabilities you l
 <td>The name of your bot during this game.</td>
 </tr>
 <tr>
-<td><code>players</code></td>
+<td><code>role</code></td>
+<td>String</td>
+<td>The role of your bot in the game. This also determines your alliance. One of: <code>servant</code>, <code>merlin</code>, <code>percival</code>, <code>minion</code>, <code>assassin</code>, <code>mordred</code>, <code>morgana</code>, <code>oberon</code></td>
+</tr>
+<tr>
+<td><code>see</code></td>
+<td>Object</td>
+<td>Your perspective about other players.</td>
+</tr>
+</tbody></table>
+<h3 id='see-object-schema'><code>see</code> Object Schema</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>spies</code></td>
 <td>Array of string</td>
-<td>The list of players participating in this game, ordered by seat number.</td>
+<td>The list of players you perceive to be spies.</td>
+</tr>
+<tr>
+<td><code>merlins</code></td>
+<td>Array of string</td>
+<td>The list of players you perceive to be merlin.</td>
 </tr>
 </tbody></table>
 <h3 id='response-object-schema-2'>Response Object Schema</h3>
@@ -529,7 +567,7 @@ Make sure to test your bot to ensure it can handle all of the capabilities you l
 <p>ProAvalon will send a payload like this:</p>
 </blockquote>
 <pre class="highlight json-doc tab-json-doc"><code><span class="p">{</span><span class="w">
-  </span><span class="s2">"sessionID"</span><span class="p">:</span><span class="w"> </span><span class="s2">"be565d891243703c22e1"</span><span class="p">,</span><span class="w"> </span><span class="c1">// The session ID from create session endpoint,</span><span class="w">
+  </span><span class="s2">"sessionID"</span><span class="p">:</span><span class="w"> </span><span class="s2">"be565d891243703c22e1"</span><span class="p">,</span><span class="w"> </span><span class="c1">// The session ID from create session endpoint</span><span class="w">
   </span><span class="s2">"gameInfo"</span><span class="p">:</span><span class="w"> </span><span class="p">{}</span><span class="w"> </span><span class="c1">// The large game info object - TODO: Add an example object</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
@@ -537,24 +575,46 @@ Make sure to test your bot to ensure it can handle all of the capabilities you l
 <p>During proposal phases, your bot should return a response like this:</p>
 </blockquote>
 <pre class="highlight json-doc tab-json-doc"><code><span class="p">{</span><span class="w">
-  </span><span class="c1">// TODO: Fill this in with desired response</span><span class="w">
+  </span><span class="s2">"buttonPressed"</span><span class="p">:</span><span class="w"> </span><span class="s2">"yes"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"selectedPlayers"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="s2">"ProNub"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"Detry322"</span><span class="w">
+  </span><span class="p">]</span><span class="w">
 </span><span class="p">}</span><span class="w">
+
+</span><span class="c1">// This proposes a team with players "ProNub" and "Detry322"</span><span class="w">
 </span></code></pre>
 <blockquote>
 <p>During voting phases, your bot should return a response like this:</p>
 </blockquote>
 <pre class="highlight json-doc tab-json-doc"><code><span class="p">{</span><span class="w">
-  </span><span class="c1">// TODO: Fill this in with desired response</span><span class="w">
+  </span><span class="s2">"buttonPressed"</span><span class="p">:</span><span class="w"> </span><span class="s2">"yes"</span><span class="p">,</span><span class="w"> </span><span class="c1">// or "no"</span><span class="w">
 </span><span class="p">}</span><span class="w">
+
+</span><span class="c1">// This approves the proposed mission.</span><span class="w">
 </span></code></pre>
 <blockquote>
-<p>During merlin selection phases, your bot should return a response like this:</p>
+<p>During mission phases, your bot should return a response like this:</p>
 </blockquote>
 <pre class="highlight json-doc tab-json-doc"><code><span class="p">{</span><span class="w">
-  </span><span class="c1">// TODO: Fill this in with desired response</span><span class="w">
+  </span><span class="s2">"buttonPressed"</span><span class="p">:</span><span class="w"> </span><span class="s2">"yes"</span><span class="p">,</span><span class="w"> </span><span class="c1">// or "no"</span><span class="w">
 </span><span class="p">}</span><span class="w">
+
+</span><span class="c1">// This succeeds the mission.</span><span class="w">
 </span></code></pre>
-<p>This endpoint is called every time your bot needs to make an action.</p>
+<blockquote>
+<p>During merlin selection phase, your bot should return a response like this:</p>
+</blockquote>
+<pre class="highlight json-doc tab-json-doc"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"buttonPressed"</span><span class="p">:</span><span class="w"> </span><span class="s2">"yes"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"selectedPlayers"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="s2">"Detry322"</span><span class="w">
+  </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+
+</span><span class="c1">// This selects Detry322 as the merlin.</span><span class="w">
+</span></code></pre>
+<p>Using this endpoint, you return you bot&#39;s action to ProAvalon. This endpoint is called every time your bot needs to make an action.</p>
 <h3 id='http-request-3'>HTTP Request</h3>
 <p><code>POST /v0/session/act</code></p>
 <h3 id='request-object-schema-3'>Request Object Schema</h3>
@@ -577,7 +637,24 @@ Make sure to test your bot to ensure it can handle all of the capabilities you l
 </tr>
 </tbody></table>
 <h3 id='response-object-schema-3'>Response Object Schema</h3>
-<p>TODO.</p>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>buttonPressed</code></td>
+<td><code>&quot;yes&quot;</code> or <code>&quot;no&quot;</code></td>
+<td>Specifies the button your bot will press. During different game phases, this will mean different things.</td>
+</tr>
+<tr>
+<td><code>selectedPlayers</code></td>
+<td>Array of string</td>
+<td>If the current game phase requires your bot to select players, this specifies the players to be selected.</td>
+</tr>
+</tbody></table>
 <h3 id='http-response-codes-3'>HTTP Response Codes</h3>
 <table><thead>
 <tr>
@@ -590,8 +667,67 @@ Make sure to test your bot to ensure it can handle all of the capabilities you l
 <td>Your API successfully returned a move.</td>
 </tr>
 <tr>
-<td><code>400 Bad Request</code></td>
-<td>Your API was unable to parse the payload from ProAvalon.</td>
+<td><code>401 Unauthorized</code></td>
+<td>Your API was provided an incorrect <code>Authorization</code> header.</td>
+</tr>
+<tr>
+<td><code>404 Not Found</code></td>
+<td>Your API could not find a session with the given session ID.</td>
+</tr>
+</tbody></table>
+<h2 id='end-a-game-session'>End a game session</h2>
+<blockquote>
+<p>ProAvalon will send a payload like this:</p>
+</blockquote>
+<pre class="highlight json-doc tab-json-doc"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"sessionID"</span><span class="p">:</span><span class="w"> </span><span class="s2">"be565d891243703c22e1"</span><span class="p">,</span><span class="w"> </span><span class="c1">// The session ID from create session endpoint</span><span class="w">
+  </span><span class="s2">"reason"</span><span class="p">:</span><span class="w"> </span><span class="s2">"complete"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"gameInfo"</span><span class="p">:</span><span class="w"> </span><span class="p">{}</span><span class="w"> </span><span class="c1">// The final Game Info object for this game.</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<blockquote>
+<p>There is no need for your API to return a response other than 200 OK</p>
+</blockquote>
+
+<p>This endpoint is used to help clean up the information used during play. It is called whenever a game is finished.</p>
+<h3 id='http-request-4'>HTTP Request</h3>
+<p><code>POST /v0/session/delete</code></p>
+<h3 id='request-object-schema-4'>Request Object Schema</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>sessionID</code></td>
+<td>String</td>
+<td>The session ID describing the game being played.</td>
+</tr>
+<tr>
+<td><code>reason</code></td>
+<td><code>&quot;complete&quot;</code> or <code>&quot;error&quot;</code></td>
+<td>The reason this game was ended.</td>
+</tr>
+<tr>
+<td><code>gameInfo</code></td>
+<td>GameInfo</td>
+<td>A large object describing the full state of the game.</td>
+</tr>
+</tbody></table>
+<h3 id='response-object-schema-4'>Response Object Schema</h3>
+<p>No response object is necessary.</p>
+<h3 id='http-response-codes-4'>HTTP Response Codes</h3>
+<table><thead>
+<tr>
+<th>Code</th>
+<th>Meaning</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>200 OK</code></td>
+<td>Your API successfully cleaned up the data.</td>
 </tr>
 <tr>
 <td><code>401 Unauthorized</code></td>
