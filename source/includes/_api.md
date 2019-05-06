@@ -11,12 +11,12 @@
   "capabilities": [
     {
       "numPlayers": [5],
-      "ladyOfTheLake": true,
+      "cards": ["lady of the lake"],
       "roles": ["percival", "mordred", "oberon"]
     },
     {
       "numPlayers": [6, 7],
-      "ladyOfTheLake": false,
+      "cards": [],
       "roles": []
     }
   ]
@@ -30,7 +30,7 @@
 //          - May include lady of the lake
 //          - May include Percival, Mordred, or Oberon as special roles.
 //       - Games with 6 or 7 players
-//          - May *not* include lady of the lake
+//          - May *not* include lady of the lake or other special cards
 //          - May *not* include any special roles like Oberon, Percival, or Mordred.
 ```
 
@@ -57,8 +57,8 @@ Parameter | Type | Description
 Parameter | Type | Description
 --------- | ------- | -----------
 `numPlayers` | Array of integer | The number of players that this capability schema applies to. Multiple values are allowed.
-`ladyOfTheLake` | Boolean | If set to true, indicates that your bot can handle games with lady of the lake.
-`roles` | Array of string | A list of special roles that your bot can handle. Valid values are: `percival`, `mordred`, `morgana`, `oberon`. It is assumed your bot can handle the Merlin, Assassin, Loyal Servant of Arthur, and Minion of Mordred roles.
+`cards` | Array of string | A list of special cards that your bot can handle. Valid values are: `"lady of the lake"` and `"ref of the rain"`.
+`roles` | Array of string | A list of special roles that your bot can handle. Valid values are: `percival`, `mordred`, `morgana`, `oberon`. It is assumed your bot can handle the Merlin, Assassin, Loyal Servant of Arthur (Resistance), and Minion of Mordred (Spy) roles.
 
 ### HTTP Response Codes
 
@@ -78,7 +78,7 @@ Make sure to test your bot to ensure it can handle all of the capabilities you l
 {
   "numPlayers": 6,
   "roles": ["percival", "morgana"],
-  "ladyOfTheLake": false,
+  "cards": ["lady of the lake"],
   "teamLeader": 2,
   "players": [
     "ExamplePlayer1",
@@ -99,7 +99,7 @@ Make sure to test your bot to ensure it can handle all of the capabilities you l
 // This indicates ProAvalon wishes to start a game session:
 //    - With 6 players.
 //    - With the Percival and Morgana special roles in play.
-//    - Where lady of the lake is *not* in play.
+//    - Where lady of the lake is in play.
 //    - Where the team leader (first proposer of the game) is player 2.
 //    - Where your bot's username is DeepRole#23432.
 //    - Where the players above are playing.
@@ -128,11 +128,11 @@ Parameter | Type | Description
 --------- | ------- | -----------
 `numPlayers` | Integer | The number of players in this game
 `roles` | Array of string | The list of special roles in use during this game. See "Get Bot Information" endpoint for valid values.
-`ladyOfTheLake` | Boolean | If set to true, the Lady of the Lake is in play during this game session.
+`cards` | Array of string | Specifies the special cards that are active during this game session. Valid values are: `"lady of the lake"` and `"ref of the rain"`.
 `teamLeader` | Integer | The (0-indexed) index of the first player to propose during this game.
 `players` | Array of string | The list of players participating in this game, ordered by seat number.
 `name` | String | The name of your bot during this game.
-`role` | String | The role of your bot in the game. This also determines your alliance. One of: `servant`, `merlin`, `percival`, `minion`, `assassin`, `mordred`, `morgana`, `oberon`
+`role` | String | The role of your bot in the game. This also determines your alliance. Good (Resistance) roles: `resistance`, `merlin`, `percival`. Evil (Spy) roles: `spy`, `assassin`, `mordred`, `morgana`, `oberon`.
 `see` | Object | Your perspective about other players.
 
 ### `see` Object Schema

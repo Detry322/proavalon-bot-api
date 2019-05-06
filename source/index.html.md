@@ -81,5 +81,5 @@ ProAvalon will communicate with your bot via a JSON REST API. All request payloa
 All requests made to a ProAvalon bot will be secured with an `Authorization` header. Your API should share an API key with ProAvalon.com to be sent on every API request. This will ensure only ProAvalon.com can make requests, preventing denial-of-service attacks.
 
 <aside class="notice">
-Ensure that your API always returns properly formatted JSON. Make sure to include the proper <code>Content-Type: application/json</code> header.
+Ensure that your API always returns properly formatted JSON. Make sure to include the proper <code>Content-Type: application/json</code> header in your response.
 </aside>
