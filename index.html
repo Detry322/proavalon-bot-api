@@ -324,7 +324,7 @@ Ensure that your API always returns properly formatted JSON. Make sure to includ
     </span><span class="p">{</span><span class="w">
       </span><span class="s2">"numPlayers"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">5</span><span class="p">],</span><span class="w">
       </span><span class="s2">"cards"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"lady of the lake"</span><span class="p">],</span><span class="w">
-      </span><span class="s2">"roles"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"percival"</span><span class="p">,</span><span class="w"> </span><span class="s2">"mordred"</span><span class="p">,</span><span class="w"> </span><span class="s2">"oberon"</span><span class="p">]</span><span class="w">
+      </span><span class="s2">"roles"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"Percival"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Mordred"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Oberon"</span><span class="p">]</span><span class="w">
     </span><span class="p">},</span><span class="w">
     </span><span class="p">{</span><span class="w">
       </span><span class="s2">"numPlayers"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p">],</span><span class="w">
@@ -395,7 +395,7 @@ Ensure that your API always returns properly formatted JSON. Make sure to includ
 <tr>
 <td><code>roles</code></td>
 <td>Array of string</td>
-<td>A list of special roles that your bot can handle. Valid values are: <code>percival</code>, <code>mordred</code>, <code>morgana</code>, <code>oberon</code>. It is assumed your bot can handle the Merlin, Assassin, Loyal Servant of Arthur (Resistance), and Minion of Mordred (Spy) roles.</td>
+<td>A list of special roles that your bot can handle. Valid values are: <code>Percival</code>, <code>Mordred</code>, <code>Morgana</code>, <code>Oberon</code>. It is assumed your bot can handle the Merlin, Assassin, Loyal Servant of Arthur (Resistance), and Minion of Mordred (Spy) roles.</td>
 </tr>
 </tbody></table>
 <h3 id='http-response-codes'>HTTP Response Codes</h3>
@@ -420,7 +420,7 @@ Make sure to test your bot to ensure it can handle all of the capabilities you l
 </blockquote>
 <pre class="highlight json-doc tab-json-doc"><code><span class="p">{</span><span class="w">
   </span><span class="s2">"numPlayers"</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"roles"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"percival"</span><span class="p">,</span><span class="w"> </span><span class="s2">"morgana"</span><span class="p">],</span><span class="w">
+  </span><span class="s2">"roles"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"Percival"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Morgana"</span><span class="p">],</span><span class="w">
   </span><span class="s2">"cards"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"lady of the lake"</span><span class="p">],</span><span class="w">
   </span><span class="s2">"teamLeader"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
   </span><span class="s2">"players"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
@@ -432,7 +432,7 @@ Make sure to test your bot to ensure it can handle all of the capabilities you l
     </span><span class="s2">"Detry322"</span><span class="w">
   </span><span class="p">],</span><span class="w">
   </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"DeepRole#23432"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"role"</span><span class="p">:</span><span class="w"> </span><span class="s2">"merlin"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"role"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Merlin"</span><span class="p">,</span><span class="w">
   </span><span class="s2">"see"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
     </span><span class="s2">"spies"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"CoolPlayer"</span><span class="p">,</span><span class="w"> </span><span class="s2">"CoolPerson"</span><span class="p">],</span><span class="w">
     </span><span class="s2">"merlins"</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span><span class="w">
@@ -501,7 +501,7 @@ Make sure to test your bot to ensure it can handle all of the capabilities you l
 <tr>
 <td><code>role</code></td>
 <td>String</td>
-<td>The role of your bot in the game. This also determines your alliance. Good (Resistance) roles: <code>resistance</code>, <code>merlin</code>, <code>percival</code>. Evil (Spy) roles: <code>spy</code>, <code>assassin</code>, <code>mordred</code>, <code>morgana</code>, <code>oberon</code>.</td>
+<td>The role of your bot in the game. This also determines your alliance. Good (Resistance) roles: <code>Resistance</code>, <code>Merlin</code>, <code>Percival</code>. Evil (Spy) roles: <code>Spy</code>, <code>Assassin</code>, <code>Mordred</code>, <code>Morgana</code>, <code>Oberon</code>.</td>
 </tr>
 <tr>
 <td><code>see</code></td>
